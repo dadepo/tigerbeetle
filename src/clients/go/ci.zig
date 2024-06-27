@@ -51,6 +51,7 @@ pub fn tests(shell: *Shell, gpa: std.mem.Allocator) !void {
 
         var tmp_beetle = try TmpTigerBeetle.init(gpa, .{});
         defer tmp_beetle.deinit(gpa);
+        errdefer tmp_beetle.log_stderr();
 
         try shell.env.put("TB_ADDRESS", tmp_beetle.port_str.slice());
         try shell.exec("go build main.go", .{});
@@ -66,6 +67,7 @@ pub fn validate_release(shell: *Shell, gpa: std.mem.Allocator, options: struct {
         .prebuilt = options.tigerbeetle,
     });
     defer tmp_beetle.deinit(gpa);
+    errdefer tmp_beetle.log_stderr();
 
     try shell.env.put("TB_ADDRESS", tmp_beetle.port_str.slice());
 
